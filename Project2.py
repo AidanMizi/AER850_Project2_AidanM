@@ -45,6 +45,33 @@ valid_data_aug = ImageDataGenerator(
     rescale = 1./255
     )
 
+# create train and validation generators
+train_gen = train_data_aug.flow_from_directory(
+    training_data,
+    target_size=(image_width, image_height),
+    batch_size=batch_size,
+    class_mode='categorical'  
+    )
+
+valid_gen = valid_data_aug.flow_from_directory(
+    validation_data,
+    target_size=(image_width, image_height),
+    batch_size=batch_size,
+    class_mode='categorical'
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
