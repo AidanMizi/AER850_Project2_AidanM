@@ -61,6 +61,7 @@ valid_gen = valid_data_aug.flow_from_directory(
     )
 
 
+# Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 
 
 
