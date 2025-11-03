@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing import image_dataset_from_directory
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from keras.models import Sequential
 from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout, LeakyReLU
@@ -96,7 +97,14 @@ DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate
 
 # Step 4: Model Evaluation
 
-history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=15, batch_size=128, validation_split=0.001)
+early_stopping = EarlyStopping(
+    monitor='val_loss',
+    patience=5,
+    mode='min',
+    restore_best_weights=True
+    )
+
+history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=15, batch_size=128, validation_split=0.001, callbacks=[early_stopping])
 
 
 
