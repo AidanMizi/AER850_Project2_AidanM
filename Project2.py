@@ -62,10 +62,74 @@ valid_gen = valid_data_aug.flow_from_directory(
 
 
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
+DCNN_model = Sequential()
+DCNN_model.add(Conv2D(128,(3,3), strides=(1, 1),activation='relu',input_shape=(image_width, image_height, image_channel)))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+
+# second stack
+DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), activation='relu'))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+
+# third stack
+DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), activation='relu'))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#fourth stack 
+DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), activation='relu'))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+
+# Flatten 
+DCNN_model.add(Flatten()),
+DCNN_model.add(Dense(256, activation = 'relu')), 
+DCNN_model.add(Dense(32, activation = 'relu'))
+DCNN_model.add(Dropout(0.1))
+DCNN_model.add(Dense(3, activation = 'softmax')) 
+
+print(DCNN_model.summary())
+
+
+learning_rate = 1e-5
+DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=learning_rate), metrics=['accuracy'])
 
 
 
 
+# Step 4: Model Evaluation
+
+history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=15, batch_size=128, validation_split=0.001)
+
+
+
+
+# Plot the validation and train
+
+
+# Plotting accuracy over epochs
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.plot(history1.history['accuracy'], label='Training Accuracy')
+plt.plot(history1.history['val_accuracy'], label='Validation Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.title('Training and Validation Accuracy for Model 1')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+
+# Plotting Loss over epochs
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.plot(history1.history['loss'], label='Training Loss')  # Changed 'Loss' to 'loss'
+plt.plot(history1.history['val_loss'], label='Validation Loss')  # Changed 'val_Loss' to 'val_loss'
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Training and Validation Loss for Model 1')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+
+
+
+# Save the model
+DCNN_model.save('model1.h5')
 
 
 
