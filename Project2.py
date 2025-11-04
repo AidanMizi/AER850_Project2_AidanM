@@ -76,14 +76,14 @@ DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), padding='same', activation='r
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 #fourth stack 
-#DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), activation='relu'))
-#DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+DCNN_model.add(Conv2D(256, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Flatten 
 DCNN_model.add(Flatten()),
 DCNN_model.add(Dense(128, activation = 'relu')), 
 #DCNN_model.add(Dense(32, activation = 'relu'))
-DCNN_model.add(Dropout(0.25))
+DCNN_model.add(Dropout(0.3))
 DCNN_model.add(Dense(3, activation = 'softmax')) 
 
 print(DCNN_model.summary())
@@ -94,9 +94,8 @@ DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate
 
 
 
-
 # Step 4: Model Evaluation
-
+# early stopping criteria
 early_stopping = EarlyStopping(
     monitor='val_loss',
     patience=6,
@@ -104,9 +103,7 @@ early_stopping = EarlyStopping(
     restore_best_weights=True
     )
 
-history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=15, batch_size=128, validation_split=0.001, callbacks=[early_stopping])
-
-
+history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=30, steps_per_epoch=len(train_gen), validation_steps=len(valid_gen), callbacks=[early_stopping])
 
 
 # Plot the validation and train
