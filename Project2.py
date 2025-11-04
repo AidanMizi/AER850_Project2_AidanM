@@ -65,7 +65,7 @@ valid_gen = valid_data_aug.flow_from_directory(
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 DCNN_model = Sequential()
 DCNN_model.add(Conv2D(32, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
-#DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # second stack
 DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
@@ -81,9 +81,9 @@ DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Flatten 
 DCNN_model.add(Flatten()),
-DCNN_model.add(Dense(256, activation = 'relu')), 
-DCNN_model.add(Dense(32, activation = 'relu'))
-DCNN_model.add(Dropout(0.1))
+DCNN_model.add(Dense(128, activation = 'relu')), 
+#DCNN_model.add(Dense(32, activation = 'relu'))
+DCNN_model.add(Dropout(0.25))
 DCNN_model.add(Dense(3, activation = 'softmax')) 
 
 print(DCNN_model.summary())
