@@ -137,7 +137,7 @@ plt.show()
 
 
 # Save the model
-DCNN_model.save('model1.h5')
+DCNN_model.save('DCNN_model.h5')
 
 
 
