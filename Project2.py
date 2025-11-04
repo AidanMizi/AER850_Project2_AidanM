@@ -35,9 +35,9 @@ validation_data = r"Data\valid"
 # create training data image augmentation object
 train_data_aug = ImageDataGenerator(
     rescale = 1./255,
-    shear_range = 0.2,
-    zoom_range = 0.2,
-    #rotation_range = 40,
+    shear_range = 30.0,
+    zoom_range = 20.0,
+    rotation_range = 40.0,
     #horizontal_flip = True
     )
     
@@ -64,32 +64,32 @@ valid_gen = valid_data_aug.flow_from_directory(
 
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 DCNN_model = Sequential()
-DCNN_model.add(Conv2D(32, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
+DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # second stack
-DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
-DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
-
-# third stack
 DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), padding='same', activation='relu'))
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
-#fourth stack 
-DCNN_model.add(Conv2D(256, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+# third stack
+DCNN_model.add(Conv2D(256, (3, 3), strides=(1, 1), activation='relu'))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+
+# fourth stack 
+DCNN_model.add(Conv2D(512, (3, 3), strides=(1, 1), activation='relu'))
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Flatten 
 DCNN_model.add(Flatten()),
 DCNN_model.add(Dense(128, activation = 'relu')), 
-#DCNN_model.add(Dense(32, activation = 'relu'))
+DCNN_model.add(Dense(64, activation = 'relu'))
 DCNN_model.add(Dropout(0.1))
 DCNN_model.add(Dense(3, activation = 'softmax')) 
 
 print(DCNN_model.summary())
 
 
-learning_rate = 1e-3
+learning_rate = 1e-4
 DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=learning_rate), metrics=['accuracy'])
 
 
@@ -98,12 +98,12 @@ DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate
 # early stopping criteria
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=7,
+    patience=5,
     mode='min',
     restore_best_weights=True
     )
 
-history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=20, steps_per_epoch=len(train_gen), validation_steps=len(valid_gen), callbacks=[early_stopping])
+history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=35, steps_per_epoch=len(train_gen), validation_steps=len(valid_gen), callbacks=[early_stopping])
 
 
 # Plot the validation and train
@@ -116,7 +116,7 @@ plt.plot(history1.history['accuracy'], label='Training Accuracy')
 plt.plot(history1.history['val_accuracy'], label='Validation Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
-plt.title('Training and Validation Accuracy for Model 1')
+plt.title('Training and Validation Accuracy for DCNN Model')
 plt.legend(['Train', 'Validation'], loc='upper left')
 plt.show()
 
@@ -127,7 +127,7 @@ plt.plot(history1.history['loss'], label='Training Loss')  # Changed 'Loss' to '
 plt.plot(history1.history['val_loss'], label='Validation Loss')  # Changed 'val_Loss' to 'val_loss'
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
-plt.title('Training and Validation Loss for Model 1')
+plt.title('Training and Validation Loss for DCNN Model')
 plt.legend(['Train', 'Validation'], loc='upper left')
 plt.show()
 
