@@ -28,10 +28,10 @@ for img_path in test_image_paths:
 
     # display result
     print(f"Image: {img_path}")
-    print(f"Predicted class: {class_names[predicted_class]} with confidence {confidence:.2f}")
+    print(f"Predicted classification: {class_names[predicted_class]} with confidence {confidence:.2f}")
 
     # display the image with the prediction
     plt.imshow(img)
-    plt.title(f"Predicted: {class_names[predicted_class]} ({confidence:.2f})")
+    plt.title(f"Predicted classification: {class_names[predicted_class]} ({confidence:.2f})")
     plt.axis('off')
     plt.show()

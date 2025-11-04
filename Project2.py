@@ -64,8 +64,8 @@ valid_gen = valid_data_aug.flow_from_directory(
 
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 DCNN_model = Sequential()
-DCNN_model.add(Conv2D(32, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
-DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+DCNN_model.add(Conv2D(32, (5, 5), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
+#DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # second stack
 DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
@@ -89,7 +89,7 @@ DCNN_model.add(Dense(3, activation = 'softmax'))
 print(DCNN_model.summary())
 
 
-learning_rate = 1e-3
+learning_rate = 1e-4
 DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=learning_rate), metrics=['accuracy'])
 
 
@@ -98,7 +98,7 @@ DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate
 # early stopping criteria
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=6,
+    patience=7,
     mode='min',
     restore_best_weights=True
     )
