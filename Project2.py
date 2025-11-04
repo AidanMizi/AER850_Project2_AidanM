@@ -64,8 +64,8 @@ valid_gen = valid_data_aug.flow_from_directory(
 
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 DCNN_model = Sequential()
-DCNN_model.add(Conv2D(32, (5, 5), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
-#DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
+DCNN_model.add(Conv2D(32, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
+DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # second stack
 DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
@@ -83,13 +83,13 @@ DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 DCNN_model.add(Flatten()),
 DCNN_model.add(Dense(128, activation = 'relu')), 
 #DCNN_model.add(Dense(32, activation = 'relu'))
-DCNN_model.add(Dropout(0.3))
+DCNN_model.add(Dropout(0.1))
 DCNN_model.add(Dense(3, activation = 'softmax')) 
 
 print(DCNN_model.summary())
 
 
-learning_rate = 1e-4
+learning_rate = 1e-3
 DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=learning_rate), metrics=['accuracy'])
 
 
@@ -103,7 +103,7 @@ early_stopping = EarlyStopping(
     restore_best_weights=True
     )
 
-history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=30, steps_per_epoch=len(train_gen), validation_steps=len(valid_gen), callbacks=[early_stopping])
+history1 = DCNN_model.fit(x=train_gen, validation_data=valid_gen, epochs=20, steps_per_epoch=len(train_gen), validation_steps=len(valid_gen), callbacks=[early_stopping])
 
 
 # Plot the validation and train
