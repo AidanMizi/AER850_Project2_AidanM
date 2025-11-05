@@ -35,10 +35,10 @@ validation_data = r"Data\valid"
 # create training data image augmentation object
 train_data_aug = ImageDataGenerator(
     rescale = 1./255,
-    shear_range = 30.0,
-    zoom_range = 20.0,
-    rotation_range = 40.0,
-    #horizontal_flip = True
+    shear_range = 0.2,
+    zoom_range = 0.2,
+    rotation_range = 20.0,
+    horizontal_flip = True
     )
     
 # create validation data image augmentation object
@@ -64,11 +64,11 @@ valid_gen = valid_data_aug.flow_from_directory(
 
 # Step 2 and 3: Neural Network Architecture Design & Hyperparameter Analysis
 DCNN_model = Sequential()
-DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu',input_shape=(image_width, image_height, image_channel)))
+DCNN_model.add(Conv2D(64, (3, 3), strides=(1, 1), activation='relu',input_shape=(image_width, image_height, image_channel)))
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # second stack
-DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+DCNN_model.add(Conv2D(128, (3, 3), strides=(1, 1), activation='relu'))
 DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # third stack
@@ -82,7 +82,7 @@ DCNN_model.add(MaxPooling2D(pool_size=(2, 2)))
 # Flatten 
 DCNN_model.add(Flatten()),
 DCNN_model.add(Dense(128, activation = 'relu')), 
-DCNN_model.add(Dense(64, activation = 'relu'))
+DCNN_model.add(Dense(32, activation = 'relu'))
 DCNN_model.add(Dropout(0.1))
 DCNN_model.add(Dense(3, activation = 'softmax')) 
 
@@ -98,7 +98,7 @@ DCNN_model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate
 # early stopping criteria
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=5,
+    patience=7,
     mode='min',
     restore_best_weights=True
     )
